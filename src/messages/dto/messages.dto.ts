@@ -16,29 +16,29 @@ export class MessagesDto {
   })
   @IsNotEmpty()
   @IsString()
-  desciption: string;
+  description: string;
 
-  @ApiProperty({
-    example: '412510a6-733b-49f4-aa09-3ffddd1f9de1',
-    description: 'Id of the message\'s like',
-  })
-  @IsNotEmpty()
-  @IsString()
-  like_id: string;
+  // @ApiProperty({
+  //   example: '412510a6-733b-49f4-aa09-3ffddd1f9de1',
+  //   description: 'Id of the message\'s like',
+  // })
+  // @IsNotEmpty()
+  // @IsString()
+  // like_id: string;
 
-  @ApiProperty({
-    example: '412510a6-733b-49f4-aa09-3ffddd1f9de1',
-    description: 'Id of the message\'s dislike',
-  })
-  @IsNotEmpty()
-  @IsString()
-  dislike_id: string;
+  // @ApiProperty({
+  //   example: '412510a6-733b-49f4-aa09-3ffddd1f9de1',
+  //   description: 'Id of the message\'s dislike',
+  // })
+  // @IsNotEmpty()
+  // @IsString()
+  // dislike_id: string;
 
-  @ApiProperty({
-    example: '412510a6-733b-49f4-aa09-3ffddd1f9de1',
-    description: 'Id of the message\'s comment',
-  })
-  @IsNotEmpty()
-  @IsString()
-  comment_id: string;
+  // @ApiProperty({
+  //   example: '412510a6-733b-49f4-aa09-3ffddd1f9de1',
+  //   description: 'Id of the message\'s comment',
+  // })
+  // @IsNotEmpty()
+  // @IsString()
+  // comment_id: string;
 }

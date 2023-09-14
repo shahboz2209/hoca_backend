@@ -13,6 +13,8 @@ export class MessagesService {
   ) {}
 
   async create(messagesDto: MessagesDto, source: any) {
+    console.log('object');
+
     try {
       if (source) {
         const file_name = await this.fileService.createFile(source);
@@ -27,6 +29,7 @@ export class MessagesService {
         };
       }
     } catch (error) {
+      console.log('object');
       throw new BadRequestException(error.message);
     }
   }

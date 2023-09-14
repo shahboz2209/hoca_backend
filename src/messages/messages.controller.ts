@@ -18,14 +18,12 @@ import { AuthGuard } from 'src/guard/auth.guard';
 import { MessagesDto } from './dto/messages.dto';
 import { ImageValidationPipe } from 'src/pipes/file-validation.pipe';
 
-
 @ApiTags('Messages')
 @Controller('messages')
 export class MessagesController {
   constructor(private readonly messagesService: MessagesService) {}
-
-  @ApiOperation({ summary: 'Create new messages' })
   // @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Create new messages' })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     schema: {
@@ -40,16 +38,17 @@ export class MessagesController {
         source: {
           type: 'string',
           format: 'binary',
-        },
-      },
-    },
+        }
+      }
+    }
   })
-  @Post()
+  @Post('create')
   @UseInterceptors(FileInterceptor('image'))
   create(
     @Body() messagesDto: MessagesDto,
     @UploadedFile(new ImageValidationPipe()) source: Express.Multer.File,
   ) {
+    console.log('controllers');
     return this.messagesService.create(messagesDto, source);
   }
 

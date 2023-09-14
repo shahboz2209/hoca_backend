@@ -6,9 +6,6 @@ interface MessagesAttrs {
   title: string;
   description: string;
   source: string;
-  like_id: string;
-  dislike_id: string;
-  comment_id: string;
 }
 
 @Table({ tableName: 'messages' })
