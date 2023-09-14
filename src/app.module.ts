@@ -3,34 +3,25 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { AdminModule } from './admin/admin.module';
-import { SalesmanModule } from './salesman/salesman.module';
-import { SocialNetworkModule } from './social-network/social-network.module';
-import { CategoryModule } from './category/category.module';
-import { ProductModule } from './product/product.module';
-import { ImageModule } from './image/image.module';
-import { ClientModule } from './client/client.module';
-import { SoldProductModule } from './sold-product/sold-product.module';
 import { JwtModule } from '@nestjs/jwt';
-import { StudentModule } from './student/student.module';
-import { TestModule } from './tests/tests.module';
 
 // import { BotModule } from './bot/bot.module';
 import { TelegrafModule } from 'nestjs-telegraf';
-import { BOT_NAME } from './app.constants';
-import { Bot } from './bot/models/bot.model';
-import { GroupModule } from './groups/groups.module';
-import { AnswerModule } from './answers/answers.module';
+import { JobsModule } from './jobs/jobs.module';
+import { MulterModule } from '@nestjs/platform-express';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { diskStorage } from 'multer';
+import { resolve } from 'path';
+import { FilesModule } from './files/files.module';
+import { LikesModule } from './likes/likes.module';
+import { UserModule } from './user/user.module';
+import { MessagesModule } from './messages/messages.module';
+import { TravelsModule } from './travels/travels.module';
+import { DislikesModule } from './dislikes/dislikes.module';
+import { CommentsModule } from './comments/comments.module';
 
 @Module({
   imports: [
-    // TelegrafModule.forRootAsync({
-    //   botName: BOT_NAME,
-    //   useFactory: () => ({
-    //     token: process.env.BOT_TOKEN,
-    //     middlewares: [],
-    //     includes: [BotModule],
-    //   }),
-    // }),
     ConfigModule.forRoot({
       envFilePath: '.env',
       isGlobal: true,
@@ -46,20 +37,28 @@ import { AnswerModule } from './answers/answers.module';
       models: [],
       logging: true,
     }),
+    MulterModule.register({
+      storage: diskStorage({
+        destination: '/uploads',
+        filename: (req, file, cb) => {
+          const unique_suffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
+          cb(null, file.fieldname + '-' + unique_suffix);
+        },
+      }),
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: resolve(__dirname, 'static'),
+    }),
     JwtModule.register({ global: true }),
-    AdminModule,
-    SalesmanModule,
-    SocialNetworkModule,
-    StudentModule,
-    CategoryModule,
-    ProductModule,
-    ImageModule,
-    ClientModule,
-    SoldProductModule,
-    TestModule,
-    // BotModule,
-    GroupModule,
-    AnswerModule,
+    UserModule,
+    JobsModule,
+    MessagesModule,
+    TravelsModule,
+    LikesModule,
+    DislikesModule,
+    CommentsModule,
+    FilesModule,
   ],
 })
 export class AppModule {}

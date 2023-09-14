@@ -14,14 +14,14 @@ export class AuthGuard implements CanActivate {
     const auth_header = req.headers.authorization;
     if (!auth_header) {
       throw new UnauthorizedException({
-        message: 'Token topilmadi!',
+        message: 'Token not found!',
       });
     }
     const bearer = auth_header.split(' ')[0];
     const token = auth_header.split(' ')[1];
     if (bearer !== 'Bearer' || !token) {
       throw new UnauthorizedException({
-        message: 'Token topilmadi!',
+        message: 'Token not found!',
       });
     }
     let user: any;
@@ -38,7 +38,7 @@ export class AuthGuard implements CanActivate {
         });
         if (date_now >= user.exp) {
           throw new UnauthorizedException({
-            message: 'Token vaqti tugagan!',
+            message: 'Token has expired!',
           });
         } else {
           const jwt_payload = { id: req.user.id };
@@ -51,7 +51,7 @@ export class AuthGuard implements CanActivate {
       }
     } catch (error) {
       throw new UnauthorizedException({
-        message: 'Token vaqti tugagan!',
+        message: 'Token has expired!',
       });
     }
     return true;
