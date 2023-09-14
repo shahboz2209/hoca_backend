@@ -18,37 +18,38 @@ import { AuthGuard } from 'src/guard/auth.guard';
 import { MessagesDto } from './dto/messages.dto';
 import { ImageValidationPipe } from 'src/pipes/file-validation.pipe';
 
+
 @ApiTags('Messages')
 @Controller('messages')
 export class MessagesController {
   constructor(private readonly messagesService: MessagesService) {}
-  // @UseGuards(AuthGuard)
+
   @ApiOperation({ summary: 'Create new messages' })
-  @ApiConsumes('multipart/form-data')
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        title: {
-          type: 'string',
-        },
-        description: {
-          type: 'string',
-        },
-        source: {
-          type: 'string',
-          format: 'binary',
-        }
-      }
-    }
-  })
-  @Post('create')
+  // @UseGuards(AuthGuard)
+  // @ApiConsumes('multipart/form-data')
+  // @ApiBody({
+  //   schema: {
+  //     type: 'object',
+  //     properties: {
+  //       title: {
+  //         type: 'string',
+  //       },
+  //       description: {
+  //         type: 'string',
+  //       },
+  //       source: {
+  //         type: 'string',
+  //         format: 'binary',
+  //       },
+  //     },
+  //   },
+  // })
+  @Post()
   @UseInterceptors(FileInterceptor('image'))
   create(
     @Body() messagesDto: MessagesDto,
     @UploadedFile(new ImageValidationPipe()) source: Express.Multer.File,
   ) {
-    console.log('controllers');
     return this.messagesService.create(messagesDto, source);
   }
 
