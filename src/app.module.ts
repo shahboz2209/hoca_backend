@@ -55,6 +55,7 @@ import { CommentsModule } from './comments/comments.module';
     JobsModule,
     MessagesModule,
     TravelsModule,
+    LikesModule,
     DislikesModule,
     CommentsModule,
     FilesModule,

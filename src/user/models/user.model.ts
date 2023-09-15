@@ -84,11 +84,11 @@ export class User extends Model<User, UserAttributes> {
   })
   hashed_refresh_token: string;
 
-  @HasMany(() => Likes, {
-    onDelete: 'CASCADE',
-    hooks: true,
-  })
-  likes: Likes[];
+  // @HasMany(() => Likes, {
+  //   onDelete: 'CASCADE',
+  //   hooks: true,
+  // })
+  // likes: Likes[];
 
   @HasMany(() => Dislikes, {
     onDelete: 'CASCADE',
