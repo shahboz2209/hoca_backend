@@ -12,13 +12,14 @@ export class MessagesService {
     private readonly fileService: FilesService,
   ) {}
 
-  async create(messagesDto: MessagesDto, source: any) {
+  async create(messagesDto: MessagesDto, image: any) {
     try {
-      if (source) {
-        const file_name = await this.fileService.createFile(source);
+      console.log(image);
+      if (image) {
+        const file_name = await this.fileService.createFile(image);
         const data = await this.messagesRepository.create({
           ...messagesDto,
-          source: file_name,
+          image: file_name,
         });
         return {
           statusCode: HttpStatus.CREATED,
@@ -93,13 +94,17 @@ export class MessagesService {
     }
   }
 
-  async update(id: string, messagesDto: MessagesDto) {
+  async update(id: string, messagesDto: MessagesDto, image: any) {
     try {
       const {data} = await this.findById(id);
-      const updated_info = await this.messagesRepository.update(messagesDto, {
-        where: { id: data.id },
-        returning: true,
-      });
+      const file_name = await this.fileService.createFile(image);
+      const updated_info = await this.messagesRepository.update(
+        { ...messagesDto, image: file_name },
+        {
+          where: { id },
+          returning: true,
+        },
+      );
       return {
         statusCode: HttpStatus.OK,
         message: 'Updated message',

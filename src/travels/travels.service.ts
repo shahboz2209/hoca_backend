@@ -12,13 +12,13 @@ export class TravelsService {
     private readonly fileService: FilesService,
   ) {}
 
-  async create(travelsDto: TravelsDto, source: any) {
+  async create(travelsDto: TravelsDto, image: any) {
     try {
-      if (source) {
-        const file_name = await this.fileService.createFile(source);
+      if (image) {
+        const file_name = await this.fileService.createFile(image);
         const data = await this.travelsRepository.create({
           ...travelsDto,
-          source: file_name,
+          image: file_name,
         });
         return {
           statusCode: HttpStatus.CREATED,
@@ -93,17 +93,30 @@ export class TravelsService {
     }
   }
 
-  async update(id: string, travelsDto: TravelsDto) {
+  async update(id: string, travelsDto: TravelsDto, image: any) {
     try {
-      const {data} = await this.findById(id);
-      const updated_info = await this.travelsRepository.update(travelsDto, {
-        where: { id: data.id },
-        returning: true,
-      });
+      const { data } = await this.findById(id);
+      if (image) {
+        const file_name = await this.fileService.createFile(image);
+        const data = await this.travelsRepository.update(
+          {
+            ...travelsDto,
+            image: file_name,
+          },
+          {
+            where: { id },
+            returning: true,
+          },
+        );
+        return {
+          statusCode: HttpStatus.CREATED,
+          travel: 'Travel updated successfully!',
+          data: data[1][0],
+        };
+      }
       return {
-        statusCode: HttpStatus.OK,
-        travel: 'Updated travel',
-        data: updated_info[1][0],
+        statusCode: HttpStatus.NOT_FOUND,
+        travel: 'Please fill all fields!',
       };
     } catch (error) {
       throw new BadRequestException(error.travel);

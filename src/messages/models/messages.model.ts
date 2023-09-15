@@ -5,7 +5,7 @@ interface MessagesAttrs {
   id: string;
   title: string;
   description: string;
-  source: string;
+  image: string;
 }
 
 @Table({ tableName: 'messages' })
@@ -34,7 +34,7 @@ export class Messages extends Model<Messages, MessagesAttrs> {
     type: DataType.STRING,
     allowNull: false,
   })
-  source: string;
+  image: string;
 
   // @HasMany(() => Product, {
   //   onDelete: 'CASCADE',

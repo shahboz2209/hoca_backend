@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsDateString, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class TravelsDto {
   @ApiProperty({
@@ -7,7 +7,7 @@ export class TravelsDto {
     description: 'The departure_date of the travel',
   })
   @IsNotEmpty()
-  @IsDate()
+  @IsDateString()
   departure_date: Date; 
 
   @ApiProperty({
@@ -15,7 +15,7 @@ export class TravelsDto {
     description: 'The departure_date of the travel',
   })
   @IsNotEmpty()
-  @IsDate()
+  @IsDateString()
   arrival_date: Date;
 
   @ApiProperty({
@@ -27,10 +27,10 @@ export class TravelsDto {
   destinations: string;
 
   @ApiProperty({
-    example: '412510a6-733b-49f4-aa09-3ffddd1f9de1',
+    example: '300$',
     description: 'The cost of the travel',
   })
   @IsNotEmpty()
-  @IsNumber()
-  cost: number;
+  @IsString()
+  cost: string;
 }

@@ -12,19 +12,20 @@ export class JobsService {
     private readonly fileService: FilesService,
   ) {}
 
-  async create(jobsDto: JobsDto, source: any) {
+  async create(jobsDto: JobsDto, image: any) {
     try {
-      if (source) {
-        const file_name = await this.fileService.createFile(source);
-        if (source) {
-          const file_name = await this.fileService.createFile(source);
-          const updated_info = await this.jobsRepository.create({
+      if (image) {
+        const file_name = await this.fileService.createFile(image);
+        if (image) {
+          const file_name = await this.fileService.createFile(image);
+          const created_info = await this.jobsRepository.create({
             ...jobsDto,
-            source: file_name,
+            image: file_name,
           });
           return {
+            statusCode: HttpStatus.CREATED,
             message: 'Created job',
-            salesman: updated_info[1][0],
+            data: created_info,
           };
         }
         const data = await this.jobsRepository.create({
@@ -103,9 +104,27 @@ export class JobsService {
     }
   }
 
-  async update(id: string, jobsDto: JobsDto) {
+  async update(id: string, jobsDto: JobsDto, image: any) {
     try {
       const { data } = await this.findById(id);
+      if (image) {
+        const file_name = await this.fileService.createFile(image);
+        const data = await this.jobsRepository.update(
+          {
+            ...jobsDto,
+            image: file_name,
+          },
+          {
+            where: { id },
+            returning: true,
+          },
+        );
+        return {
+          statusCode: HttpStatus.OK,
+          travel: 'Job updated successfully!',
+          data: data[1][0],
+        };
+      }
       const updated_info = await this.jobsRepository.update(jobsDto, {
         where: { id: data.id },
         returning: true,

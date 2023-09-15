@@ -18,7 +18,6 @@ import { AuthGuard } from 'src/guard/auth.guard';
 import { TravelsDto } from './dto/travels.dto';
 import { ImageValidationPipe } from 'src/pipes/file-validation.pipe';
 
-
 @ApiTags('Travels')
 @Controller('travels')
 export class TravelsController {
@@ -31,21 +30,23 @@ export class TravelsController {
     schema: {
       type: 'object',
       properties: {
-        departure_date  : {
-          type: 'date',
+        departure_date: {
+          type: 'string',
+          format: 'date-time',
         },
         arrival_date: {
           type: 'string',
+          format: 'date-time',
         },
         destinations: {
           type: 'string',
         },
-        source: {
+        image: {
           type: 'string',
           format: 'binary',
         },
         cost: {
-          type: 'number',
+          type: 'string',
         },
       },
     },
@@ -54,9 +55,9 @@ export class TravelsController {
   @UseInterceptors(FileInterceptor('image'))
   create(
     @Body() travelsDto: TravelsDto,
-    @UploadedFile(new ImageValidationPipe()) source: Express.Multer.File,
+    @UploadedFile(new ImageValidationPipe()) image: Express.Multer.File,
   ) {
-    return this.travelsService.create(travelsDto, source);
+    return this.travelsService.create(travelsDto, image);
   }
 
   @ApiOperation({ summary: 'Get all travels' })
@@ -81,14 +82,45 @@ export class TravelsController {
   }
 
   @ApiOperation({ summary: 'Update travels by ID' })
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        departure_date: {
+          type: 'string',
+          format: 'date-time',
+        },
+        arrival_date: {
+          type: 'string',
+          format: 'date-time',
+        },
+        destinations: {
+          type: 'string',
+        },
+        image: {
+          type: 'string',
+          format: 'binary',
+        },
+        cost: {
+          type: 'string',
+        },
+      },
+    },
+  })
   @Patch(':id')
-  update(@Param('id') id: string, @Body() travelsDto: TravelsDto) {
-    return this.travelsService.update(id, travelsDto);
+  @UseInterceptors(FileInterceptor('image'))
+  update(
+    @Param('id') id: string,
+    @Body() travelsDto: TravelsDto,
+    @UploadedFile(new ImageValidationPipe()) image: Express.Multer.File,
+  ) {
+    return this.travelsService.update(id, travelsDto, image);
   }
 
   @ApiOperation({ summary: 'Delete travels by ID' })
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.travelsService.remove(id);

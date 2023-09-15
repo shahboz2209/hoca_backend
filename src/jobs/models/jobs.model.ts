@@ -6,7 +6,7 @@ interface JobsAttrs {
   company: string;
   salary: string;
   visa: string;
-  source: string;
+  image: string;
 }
 
 @Table({ tableName: 'jobs' })
@@ -41,7 +41,7 @@ export class Jobs extends Model<Jobs, JobsAttrs> {
     type: DataType.STRING,
     allowNull: false,
   })
-  source: string;
+  image: string;
 
   // @HasMany(() => Product, {
   //   onDelete: 'CASCADE',

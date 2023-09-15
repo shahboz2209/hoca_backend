@@ -5,8 +5,8 @@ interface TravelsAttrs {
   id: string;
   departure_date: Date;
   arrival_date: Date;
-  source: string;
-  cost: number;
+  image: string;
+  cost: string;
 }
 
 @Table({ tableName: 'travels' })
@@ -41,11 +41,11 @@ export class Travels extends Model<Travels, TravelsAttrs> {
     type: DataType.STRING,
     allowNull: false,
   })
-  source: string;
+  image: string;
 
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.STRING,
     allowNull: false,
   })
-  cost: number;
+  cost: string;
 }

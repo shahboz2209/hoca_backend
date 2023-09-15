@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsDate, IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsDateString, IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
 export class UserDto {
   @ApiProperty({
@@ -32,7 +32,7 @@ export class UserDto {
     description: 'The birth date of the user',
   })
   @IsNotEmpty()
-  @IsDate()
+  @IsDateString()
   birth_date: Date;
 
   @ApiProperty({
@@ -40,7 +40,7 @@ export class UserDto {
     description: 'The isAlien of the user',
   })
   @IsNotEmpty()
-  @IsBoolean()
+  @IsString()
   isAlien: boolean;
 
   @ApiProperty({

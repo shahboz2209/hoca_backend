@@ -18,7 +18,6 @@ import { AuthGuard } from 'src/guard/auth.guard';
 import { JobsDto } from './dto/jobs.dto';
 import { ImageValidationPipe } from 'src/pipes/file-validation.pipe';
 
-
 @ApiTags('Jobs')
 @Controller('jobs')
 export class JobsController {
@@ -40,7 +39,7 @@ export class JobsController {
         visa: {
           type: 'string',
         },
-        source: {
+        image: {
           type: 'string',
           format: 'binary',
         },
@@ -51,9 +50,9 @@ export class JobsController {
   @UseInterceptors(FileInterceptor('image'))
   create(
     @Body() jobsDto: JobsDto,
-    @UploadedFile(new ImageValidationPipe()) source: Express.Multer.File,
+    @UploadedFile(new ImageValidationPipe()) image: Express.Multer.File,
   ) {
-    return this.jobsService.create(jobsDto, source);
+    return this.jobsService.create(jobsDto, image);
   }
 
   @ApiOperation({ summary: 'Get all jobs' })
@@ -78,14 +77,40 @@ export class JobsController {
   }
 
   @ApiOperation({ summary: 'Update jobs by ID' })
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        company: {
+          type: 'string',
+        },
+        salary: {
+          type: 'string',
+        },
+        visa: {
+          type: 'string',
+        },
+        image: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
   @Patch(':id')
-  update(@Param('id') id: string, @Body() jobsDto: JobsDto) {
-    return this.jobsService.update(id, jobsDto);
+  @UseInterceptors(FileInterceptor('image'))
+  update(
+    @Param('id') id: string,
+    @Body() jobsDto: JobsDto,
+    @UploadedFile(new ImageValidationPipe()) image: Express.Multer.File,
+  ) {
+    return this.jobsService.update(id, jobsDto, image);
   }
 
   @ApiOperation({ summary: 'Delete jobs by ID' })
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.jobsService.remove(id);

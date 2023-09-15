@@ -18,39 +18,37 @@ import { AuthGuard } from 'src/guard/auth.guard';
 import { MessagesDto } from './dto/messages.dto';
 import { ImageValidationPipe } from 'src/pipes/file-validation.pipe';
 
-
 @ApiTags('Messages')
 @Controller('messages')
 export class MessagesController {
   constructor(private readonly messagesService: MessagesService) {}
 
   @ApiOperation({ summary: 'Create new messages' })
-  // @UseGuards(AuthGuard)
-  // @ApiConsumes('multipart/form-data')
-  // @ApiBody({
-  //   schema: {
-  //     type: 'object',
-  //     properties: {
-  //       title: {
-  //         type: 'string',
-  //       },
-  //       description: {
-  //         type: 'string',
-  //       },
-  //       source: {
-  //         type: 'string',
-  //         format: 'binary',
-  //       },
-  //     },
-  //   },
-  // })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        title: {
+          type: 'string',
+        },
+        description: {
+          type: 'string',
+        },
+        image: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
   @Post()
   @UseInterceptors(FileInterceptor('image'))
-  create(
+  async create(
     @Body() messagesDto: MessagesDto,
-    @UploadedFile(new ImageValidationPipe()) source: Express.Multer.File,
+    @UploadedFile(new ImageValidationPipe()) image: Express.Multer.File,
   ) {
-    return this.messagesService.create(messagesDto, source);
+    return this.messagesService.create(messagesDto, image);
   }
 
   @ApiOperation({ summary: 'Get all messages' })
@@ -75,14 +73,37 @@ export class MessagesController {
   }
 
   @ApiOperation({ summary: 'Update messages by ID' })
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        title: {
+          type: 'string',
+        },
+        description: {
+          type: 'string',
+        },
+        image: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
   @Patch(':id')
-  update(@Param('id') id: string, @Body() messagesDto: MessagesDto) {
-    return this.messagesService.update(id, messagesDto);
+  @UseInterceptors(FileInterceptor('image'))
+  update(
+    @Param('id') id: string,
+    @Body() messagesDto: MessagesDto,
+    @UploadedFile(new ImageValidationPipe()) image: Express.Multer.File,
+  ) {
+    return this.messagesService.update(id, messagesDto, image);
   }
 
   @ApiOperation({ summary: 'Delete messages by ID' })
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.messagesService.remove(id);
