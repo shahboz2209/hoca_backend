@@ -1,4 +1,7 @@
 import { Column, DataType, Model, Table, HasMany } from 'sequelize-typescript';
+import { Likes } from '../../likes/models/likes.model';
+import { Dislikes } from '../../dislikes/models/dislikes.model';
+import { Comments } from '../../comments/models/comments.model';
 // import { SocialNetwork } from '../../social-network/models/social-network.model';
 // import { Product } from '../../product/models/product.model';
 
@@ -81,21 +84,21 @@ export class User extends Model<User, UserAttributes> {
   })
   hashed_refresh_token: string;
 
-  // @HasMany(() => SocialNetwork, {
-  //   onDelete: 'CASCADE',
-  //   hooks: true,
-  // })
-  // social_network: SocialNetwork[];
+  @HasMany(() => Likes, {
+    onDelete: 'CASCADE',
+    hooks: true,
+  })
+  likes: Likes[];
 
-  // @HasMany(() => Product, {
-  //   onDelete: 'CASCADE',
-  //   hooks: true,
-  // })
-  // product: Product[];
+  @HasMany(() => Dislikes, {
+    onDelete: 'CASCADE',
+    hooks: true,
+  })
+  dislikes: Dislikes[];
 
-  // @HasMany(() => SoldProduct, {
-  //   onDelete: 'CASCADE',
-  //   hooks: true,
-  // })
-  // sold_product: SoldProduct[];
+  @HasMany(() => Comments, {
+    onDelete: 'CASCADE',
+    hooks: true,
+  })
+  comments: Comments[];
 }
